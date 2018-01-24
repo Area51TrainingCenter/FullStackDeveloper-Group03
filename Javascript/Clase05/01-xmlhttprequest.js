@@ -1,86 +1,99 @@
-const tbody = document.querySelector("tbody")
-const inputTitulo = document.querySelector('#titulo')
-const inputDireccion = document.querySelector('#direccion')
-const btnGuardar = document.querySelector('#btnGuardar')
+const tbody = document.querySelector("tbody");
+const inputTitulo = document.querySelector("#titulo");
+const inputDireccion = document.querySelector("#direccion");
+const btnGuardar = document.querySelector("#btnGuardar");
 
-////////////// PARA LISTAR
-const objHttp = new XMLHttpRequest()
+let idSeleccionado
 
-objHttp.addEventListener("readystatechange", obj => {
-	const e = obj.currentTarget
+const listar = () => {
+  const cb = (respuesta) => {
+    const registros = JSON.parse(respuesta);
+    //console.log(registros);
 
-	// readyState indica el estado de la llamada
-	console.log(e.readyState)
+    const filas = registros
+      .sort((a, b) => {
+        console.log(a.id);
+        console.log(b.id);
+        console.log(a.id - b.id);
+        return a.id - b.id;
+      })
+      .map(farmacia => {
+        let row = `
+		  <tr>
+			  <td>${farmacia.id}</td>
+			  <td>${farmacia.titulo}</td>
+			  <td>${farmacia.direccion}</td>
+			  <td>
+				  <button class='btn btn-danger btnEliminar' data-id='${farmacia.id}'>Eliminar</button>
+				  <button class='btn btn-primary btnEditar' data-farmacia='${JSON.stringify(farmacia)}'>Editar</button>
+			  </td>
+		  </tr>	
+		  `;
+        return row;
+      })
+      .join("");
 
-	// status = 200 indica que la respuesta llego bien
-	if(e.readyState == 4 && e.status == 200 ){
-		const registros = JSON.parse(e.responseText)
-		console.log(registros)
+    tbody.innerHTML = filas;
 
-		const filas = registros
-		.sort( (a, b) => {
-			// console.log(a.id)
-			return a.id < b.id
+    const botonesEliminar = document.querySelectorAll(".btnEliminar");
+    botonesEliminar.forEach(boton => {
+      boton.addEventListener("click", function() {
+        const respuesta = confirm("Esta seguro de querer eliminar?");
+
+        if (respuesta) {
+          const id = this.dataset.id;
+          //const id = this.getAttribute('data-id')
+
+          ajax(
+            "delete",
+            `http://javascript.tibajodemanda.com/farmacia/${id}`,
+            null,
+            listar
+          );
+        }
+      });
+	});
+	
+	const botonesEditar = document.querySelectorAll('.btnEditar')
+	botonesEditar.forEach(boton => {
+		boton.addEventListener('click', function() {
+			const farmacia = JSON.parse(this.dataset.farmacia)
+
+			inputTitulo.value = farmacia.titulo
+			inputDireccion.value = farmacia.direccion
+
+			idSeleccionado = farmacia.id
 		})
-		//.sort( (a, b) => parseInt(a.id) > parseInt(b.id))
-		//.sort( (a, b) => +a.id > +b.id)
-		.map( farmacia => {
-			let row = `
-			<tr>
-				<td>${farmacia.id}</td>
-				<td>${farmacia.titulo}</td>
-				<td>${farmacia.direccion}</td>
-				<td></td>
-			</tr>	
-			`
-			return row
-		}).join("")
-		
-		tbody.innerHTML = filas		
-		
+	})
+  };
 
-	}
-})
+  ajax("get", "http://javascript.tibajodemanda.com/farmacia", null, cb);
+};
 
-/*
-	get: para traer uno o mas registros
-	post: para insertar un registro
-	put: para actualizar un registro
-	delete: para eliminar un registro
-
-	open
-		1. Verbo
-		2. Direccion URL
-		3. Sincronia
-*/
-objHttp.open("get", "http://javascript.tibajodemanda.com/farmacia", true)
-objHttp.send()
-
+listar();
 
 ////// PARA GUARDAR
 
-btnGuardar.addEventListener('click', e => {
-	e.preventDefault()
+btnGuardar.addEventListener("click", e => {
+  e.preventDefault();
 
-	const titulo = inputTitulo.value
-	const direccion = inputDireccion.value
+  const titulo = inputTitulo.value;
+  const direccion = inputDireccion.value;
 
-	const formData = new FormData()
-	formData.append('titulo', titulo)
-	formData.append('direccion', direccion)
+  const formData = new FormData();
+  formData.append("titulo", titulo);
+  formData.append("direccion", direccion);
 
-	const objxml = new XMLHttpRequest()
+  const cb = () => {
+    inputTitulo.value = "";
+	inputDireccion.value = "";
+	idSeleccionado = undefined
+    listar();
+  };
 
-	objxml.addEventListener('readystatechange', respuesta => {
-		const obj = respuesta.currentTarget
-
-		if(obj.readyState == 4 && obj.status == 201){
-			//alert('Se inserto')
-			inputTitulo.value = ''
-			inputDireccion.value = ''
-		}
-	})
-
-	objxml.open('post', 'http://javascript.tibajodemanda.com/farmacia', true)
-	objxml.send(formData)
-})
+  if(idSeleccionado){
+	ajax("put", `http://javascript.tibajodemanda.com/farmacia/${idSeleccionado}`, formData, cb);
+  } else {
+	ajax("post", "http://javascript.tibajodemanda.com/farmacia", formData, cb);
+  }
+});
