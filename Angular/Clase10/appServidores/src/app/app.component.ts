@@ -26,7 +26,7 @@ export class AppComponent {
   }
 
   actualizar(dato: {nombre: string, proveedor:string, ip:string, usuario:string, contrasena: string, sistemaOperativo:string, ftp:string} ){
-
+    
   }
 
 }

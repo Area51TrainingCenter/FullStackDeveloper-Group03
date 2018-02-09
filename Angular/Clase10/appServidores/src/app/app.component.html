@@ -2,4 +2,4 @@
 
 <app-listado [servers]="servidores" (onUpdate)="seleccionar($event)"></app-listado>
 
-<app-edicion [server]="servidorAEditar" (onServer)="actualizar($event)"></app-edicion>
+<app-edicion [server]="servidorAEditar" (onServer)="actualizar($event)" *ngIf="servidorAEditar"></app-edicion>
