@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Ilibro } from '../../../compartido/ilibro';
+import { LibroService } from '../../../compartido/libros.service';
 
 @Component({
   selector: 'app-libro-home',
@@ -6,10 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./libro-home.component.css']
 })
 export class LibroHomeComponent implements OnInit {
-
-  constructor() { }
+  @Input("item") libro: Ilibro
+  
+  constructor(private libroService: LibroService) { }
 
   ngOnInit() {
+  }
+
+  verDetalle(){
+    this.libroService.libroSeleccionado(this.libro)
   }
 
 }

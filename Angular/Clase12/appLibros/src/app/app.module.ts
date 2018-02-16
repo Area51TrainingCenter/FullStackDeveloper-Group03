@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'
 
 
 import { AppComponent } from './app.component';
@@ -13,6 +14,8 @@ import { FormularioComponent } from './formulario/formulario.component';
 import { DetalleComponent } from './detalle/detalle.component';
 import { ListadoComentariosComponent } from './detalle/listado-comentarios/listado-comentarios.component';
 import { ComentarioComponent } from './detalle/listado-comentarios/comentario/comentario.component';
+import { LibroService } from './compartido/libros.service';
+import { CarritoService } from './compartido/carrito.service';
 
 
 @NgModule({
@@ -30,9 +33,10 @@ import { ComentarioComponent } from './detalle/listado-comentarios/comentario/co
     ComentarioComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [LibroService, CarritoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LibroService } from '../../compartido/libros.service';
+import { Ilibro } from '../../compartido/ilibro';
 
 @Component({
   selector: 'app-listado-home',
@@ -6,10 +8,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./listado-home.component.css']
 })
 export class ListadoHomeComponent implements OnInit {
+  libros:Ilibro[]
 
-  constructor() { }
+
+  constructor(private libroService: LibroService) { }
 
   ngOnInit() {
+    this.libros = this.libroService.listar()
+
+    this.libroService.evento.subscribe(
+      ()=>{
+        this.libros = this.libroService.listar()
+      }
+    )
+
   }
 
 }
