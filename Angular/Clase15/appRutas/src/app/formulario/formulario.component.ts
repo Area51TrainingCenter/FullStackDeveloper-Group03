@@ -15,14 +15,34 @@ export class FormularioComponent implements OnInit {
 
   alumno: IAlumno = {nombreCompleto: "", edad: 0, idCurso: 0 }
 
+  edicion: boolean = false
+
   constructor(private cursoService: CursoService, private alumnoService: AlumnoService) { }
 
   ngOnInit() {
     this.listaCursos = this.cursoService.listado()
+    this.alumnoService.editando
+      .subscribe(
+        (alumno: IAlumno) => {
+          this.alumno = alumno
+          this.edicion = true
+        }
+
+      )
   }
 
   guardar() {
-    this.alumnoService.insertar(this.alumno)
+    if(this.edicion) {
+      this.alumnoService.actualizar(this.alumno)
+    } else {
+      this.alumnoService.insertar(this.alumno)
+    }
+    this.resetear()
+  }
+
+  resetear(): void {
+    this.alumno = {nombreCompleto: "", edad: 0, idCurso: 0 }  
+    this.edicion = false
   }
 
 }

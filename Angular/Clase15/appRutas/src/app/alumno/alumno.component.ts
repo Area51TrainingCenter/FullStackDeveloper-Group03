@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IAlumno } from 'app/i-alumno';
+import { AlumnoService } from 'app/alumno.service';
 
 @Component({
   selector: 'app-alumno',
@@ -9,9 +10,13 @@ import { IAlumno } from 'app/i-alumno';
 export class AlumnoComponent implements OnInit {
   @Input() alumno: IAlumno
 
-  constructor() { }
+  constructor(private alumnoService: AlumnoService) { }
 
   ngOnInit() {
+  }
+
+  editar(){
+    this.alumnoService.editando.emit(this.alumno)
   }
 
 }

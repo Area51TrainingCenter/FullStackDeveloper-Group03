@@ -42,7 +42,7 @@ export class AlumnoService {
   }
 
   detalle(idAlumno: number): void {
-    const elemento: IAlumno = this.lista.find(item => item.idAlumno === idAlumno)
+    const elemento: IAlumno = Object.assign({}, this.lista.find(item => item.idAlumno === idAlumno))
 
     this.editando.emit(elemento)
   }
