@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout'
 import {
   MatButtonModule,
   MatIconModule,
   MatProgressSpinnerModule,
   MatProgressBarModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatDialogModule
 } from '@angular/material'
 @NgModule({
   imports: [
@@ -18,7 +22,11 @@ import {
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FlexLayoutModule,
+    MatDialogModule
   ],
   declarations: []
 })

@@ -6,12 +6,15 @@ import { AppComponent } from './app.component';
 import { PruebaComponent } from './prueba/prueba.component';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MAT_DATE_LOCALE } from '@angular/material';
+import { PopupComponent } from './popup/popup.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    PruebaComponent
+    PruebaComponent,
+    PopupComponent
   ],
   imports: [
     BrowserModule,
@@ -19,7 +22,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     ReactiveFormsModule
   ],
-  providers: [],
-  bootstrap: [PruebaComponent]
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'es-PE'},],
+  bootstrap: [PruebaComponent],
+  entryComponents: [PopupComponent]
 })
 export class AppModule { }
