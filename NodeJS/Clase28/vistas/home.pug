@@ -1,5 +1,15 @@
-doctype html
-html
-    head
-    body
-        h1 Home Principal
+extend base
+
+include formulario
+
+block contenido
+    h1= titulo
+    ul
+        each curso in cursos
+            li
+                a(target="_blank",href=curso.url)= curso.titulo
+        +formulario("get","/insertar/registro")
+        +formulario("post","modificar/registro")
+
+block append pie
+    script(src="https://cdn.fancyboxapp.com")
